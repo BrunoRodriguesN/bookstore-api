@@ -1,5 +1,7 @@
 package com.bruno.bookstore.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +20,8 @@ public class CategoriaService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto nao encontrado! id: "
 				+ id  + ", Tipo " + Categoria.class.getName()));
 	}
+	
+	public List<Categoria> findAll(){
+		return repository.findAll();	}
 
 }
