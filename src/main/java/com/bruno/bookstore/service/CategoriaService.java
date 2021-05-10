@@ -3,6 +3,7 @@ package com.bruno.bookstore.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.bruno.bookstore.domain.Categoria;
@@ -25,22 +26,29 @@ public class CategoriaService {
 	public List<Categoria> findAll(){
 		return repository.findAll();	
 	}
-	
+	//Metodo create
 	public Categoria create(Categoria obj) {
 		obj.setId(null);
 		return repository.save(obj);
 	}
-
+	//Metodo update
 	public Categoria update(Integer id, CategoriaDTO objDto) {
 		Categoria obj = findById(id);
 		obj.setNome(objDto.getNome());
 		obj.setDescricao(objDto.getDescricao());
 		return repository.save(obj);
 	}
-
+	//Metodo delete
 	public void delete(Integer id) {
 		findById(id);
-		repository.deleteById(id);
+		try {
+			repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new com.bruno.bookstore.service.exceptions.DataIntegrityViolationException(
+			"Categoria nao pode ser deletado! Possui livros associados");
+			
+		}
+		
 		
 	}
 
